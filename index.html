@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Birthday Countdown</title>
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg, #0f172a, #1e293b);
+        color: white;
+        font-family: 'Segoe UI', sans-serif;
+        text-align: center;
+    }
+    h1 {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+    }
+    #countdown {
+        font-size: 2rem;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 15px 25px;
+        border-radius: 10px;
+    }
+    #message {
+        display: none;
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-top: 20px;
+    }
+</style>
+</head>
+<body>
+
+<h1>Countdown to My Baby's Birthday ❤️</h1>
+<div id="countdown"></div>
+<div id="message">🎉 Happy Birthday, Bubsieee! 🎉</div>
+
+<audio id="birthday-audio" src="celebration.mp3"></audio>
+
+<script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<script>
+    const TARGET_ISO = "2025-08-29T00:00";
+    const TARGET_ZONE = "Europe/Warsaw";
+
+    const { DateTime } = luxon;
+    const target = DateTime.fromISO(TARGET_ISO, { zone: TARGET_ZONE });
+
+    const countdownEl = document.getElementById("countdown");
+    const messageEl = document.getElementById("message");
+    const audio = document.getElementById("birthday-audio");
+
+    function updateCountdown() {
+        const now = DateTime.now().setZone(TARGET_ZONE);
+        const diff = target.diff(now, ["days", "hours", "minutes", "seconds"]);
+
+        if (diff.toMillis() <= 0) {
+            countdownEl.style.display = "none";
+            messageEl.style.display = "block";
+            launchConfetti();
+            playMusic();
+            clearInterval(timer);
+            return;
+        }
+
+        countdownEl.textContent = 
+            `${diff.days}d ${diff.hours}h ${diff.minutes}m ${Math.floor(diff.seconds)}s`;
+    }
+
+    function launchConfetti() {
+        const duration = 5 * 1000;
+        const end = Date.now() + duration;
+        (function frame() {
+            confetti({
+                particleCount: 5,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0 }
+            });
+            confetti({
+                particleCount: 5,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1 }
+            });
+            if (Date.now() < end) {
+                requestAnimationFrame(frame);
+            }
+        }());
+    }
+
+    function playMusic() {
+        audio.play().catch(err => {
+            console.log("Autoplay blocked. User interaction needed.");
+        });
+    }
+
+    const timer = setInterval(updateCountdown, 1000);
+    updateCountdown();
+</script>
+</body>
+</html>
