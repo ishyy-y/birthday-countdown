@@ -4,6 +4,11 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Birthday Countdown</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+
 <style>
     body {
         margin: 0;
@@ -12,26 +17,36 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        background: linear-gradient(135deg, #0f172a, #1e293b);
+        background: linear-gradient(135deg, #3EB489, #66CDAA); /* Darker mint green gradient */
         color: white;
         font-family: 'Segoe UI', sans-serif;
         text-align: center;
     }
     h1 {
-        font-size: 2.5rem;
+        font-family: 'Great Vibes', cursive;
+        font-size: 3rem;
         margin-bottom: 20px;
     }
     #countdown {
         font-size: 2rem;
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.15);
         padding: 15px 25px;
         border-radius: 10px;
     }
     #message {
         display: none;
-        font-size: 2.5rem;
-        font-weight: bold;
+        font-family: 'Anton', sans-serif;
+        font-size: 3.5rem;
+        font-weight: 900;
         margin-top: 20px;
+        letter-spacing: 2px;
+    }
+    #birthday-pic {
+        display: none;
+        max-width: 300px;
+        margin-top: 20px;
+        border-radius: 15px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.4);
     }
 </style>
 </head>
@@ -40,6 +55,7 @@
 <h1>Countdown to My Baby's Birthday ❤️</h1>
 <div id="countdown"></div>
 <div id="message">🎉 Happy Birthday, Bubsieee! 🎉</div>
+<img id="birthday-pic" src="birthday-baby.jpg" alt="Birthday Baby" />
 
 <audio id="birthday-audio" src="celebration.mp3"></audio>
 
@@ -54,6 +70,7 @@
 
     const countdownEl = document.getElementById("countdown");
     const messageEl = document.getElementById("message");
+    const pictureEl = document.getElementById("birthday-pic");
     const audio = document.getElementById("birthday-audio");
 
     function updateCountdown() {
@@ -63,6 +80,7 @@
         if (diff.toMillis() <= 0) {
             countdownEl.style.display = "none";
             messageEl.style.display = "block";
+            pictureEl.style.display = "block";
             launchConfetti();
             playMusic();
             clearInterval(timer);
